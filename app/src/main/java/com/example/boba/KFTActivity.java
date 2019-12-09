@@ -19,6 +19,8 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 public class KFTActivity extends AppCompatActivity {
     private static ArrayList drinkLog = new ArrayList<String>();
     @Override
@@ -92,7 +94,29 @@ public class KFTActivity extends AppCompatActivity {
             length = newDrinks.length;
             selectedDrink = newDrinks[getRandomNumberInRange(0, length - 1)];
         }
+
         String tops = "";
+        TextView toppingsDisplay = findViewById(R.id.toppingsDisplay);
+        if (toppingsNum == 0) {
+            toppingsDisplay.setVisibility(View.INVISIBLE);
+            TextView withText = findViewById(R.id.withText);
+            withText.setVisibility(View.INVISIBLE);
+        } else {
+            String toppingsOutput = "";
+            for (int i = 0; i < toppingsNum; i++) {
+                String input = toppings[getRandomNumberInRange(0, toppings.length - 1)];
+                toppingsOutput = toppingsOutput + input + ", " + " \n";
+                tops = tops + input + ", ";
+                if (i == toppingsNum - 1) {
+                    toppingsOutput = toppingsOutput.substring(0, toppingsOutput.length() - 4);
+                    tops = tops.substring(0, tops.length() - 3);
+                }
+            }
+            System.out.println(toppingsOutput);
+            toppingsDisplay.setText(toppingsOutput);
+        }
+
+        /**
         Integer[] topsIndex = new Integer[toppingsNum];
         if (toppingsNum == 10) {
             for (int x = 0; x < toppings.length; x++) {
@@ -117,22 +141,22 @@ public class KFTActivity extends AppCompatActivity {
             }
 
         }
+         **/
+
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = df.format(c.getTime());
         // formattedDate have current date/time
         Toast.makeText(this, formattedDate, Toast.LENGTH_SHORT).show();
-        if (toppingsNum != 0) {
-            drinkDisplay.setText(selectedDrink + " with " + tops);
-        } else {
-            drinkDisplay.setText(selectedDrink);
-        }
+        drinkDisplay.setText(selectedDrink);
         drinkLog.add(selectedDrink + ": " + formattedDate + "\n");
         Button geneButton = findViewById(R.id.geneButton);
         Button returnHome = findViewById(R.id.home);
 
         final Intent kftIntent = new Intent(this, KFTActivity.class);
+        kftIntent.putExtra("toppings", toppingsNum);
         final Intent homeIntent = new Intent(this, MainActivity.class);
+        homeIntent.putExtra("toppings", toppingsNum);
         geneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
