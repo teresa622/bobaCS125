@@ -19,12 +19,22 @@ public class DrinkLogActivity extends AppCompatActivity {
         ArrayList drinks = getIntent().getStringArrayListExtra("drinkLog");
         TextView displayDrinks = findViewById(R.id.drinks);
         String string = "";
+        if (drinks == null) {
+            displayDrinks.setText("There are no past drinks :(");
+            return;
+        }
         for (int x = 0; x < drinks.size(); x++) {
-            string = string + drinks.get(x);
+            if (x == drinks.size() - 1) {
+                string = string + drinks.get(x);
+                continue;
+            }
+            string = string + drinks.get(x) +
+                    "-----------------------------------------------------------------------------\n";
         }
         displayDrinks.setText(string);
         Button home = findViewById(R.id.home);
         final Intent homeIntent = new Intent(this, MainActivity.class);
+        homeIntent.putStringArrayListExtra("drinkLog", drinks);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

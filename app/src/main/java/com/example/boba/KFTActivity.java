@@ -93,7 +93,8 @@ public class KFTActivity extends AppCompatActivity {
             selectedDrink = newDrinks[getRandomNumberInRange(0, length - 1)];
         }
         String tops = "";
-        Integer[] topsIndex = new Integer[toppingsNum];
+        ArrayList topsIndex = new ArrayList<Integer>();
+        //Integer[] topsIndex = new Integer[toppingsNum];
         if (toppingsNum == 10) {
             for (int x = 0; x < toppings.length; x++) {
                 if (x == toppings.length - 1) {
@@ -105,12 +106,12 @@ public class KFTActivity extends AppCompatActivity {
         } else {
             for (int x = 0; x < toppingsNum; x++) {
                 Integer generateRandom = getRandomNumberInRange(0, toppings.length - 1);
-                while(Arrays.asList(topsIndex).contains(generateRandom)) {
+                while(topsIndex.contains(generateRandom)) {
                     generateRandom = getRandomNumberInRange(0, toppings.length - 1);
                 }
-                topsIndex[x] = generateRandom;
+                topsIndex.add(generateRandom);
                 if (x == toppingsNum - 1) {
-                    tops += toppings[x];
+                    tops += toppings[generateRandom];
                 } else {
                     tops += toppings[generateRandom] + " and ";
                 }
@@ -122,27 +123,28 @@ public class KFTActivity extends AppCompatActivity {
         String formattedDate = df.format(c.getTime());
         // formattedDate have current date/time
         Toast.makeText(this, formattedDate, Toast.LENGTH_SHORT).show();
+        String displayText = "";
         if (toppingsNum != 0) {
-            drinkDisplay.setText(selectedDrink + " with " + tops);
+            displayText = selectedDrink + " with " + tops;
         } else {
-            drinkDisplay.setText(selectedDrink);
+           displayText = selectedDrink;
         }
-        drinkLog.add(selectedDrink + ": " + formattedDate + "\n");
+        drinkDisplay.setText(displayText);
+        drinkLog.add(displayText + ": " + formattedDate + "\n");
         Button geneButton = findViewById(R.id.geneButton);
         Button returnHome = findViewById(R.id.home);
 
-        final Intent kftIntent = new Intent(this, KFTActivity.class);
         final Intent homeIntent = new Intent(this, MainActivity.class);
+        homeIntent.putStringArrayListExtra("drinkLog", drinkLog);
         geneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                startActivity(kftIntent);
+                startActivity(homeIntent);
             }
         });
         returnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                homeIntent.putStringArrayListExtra("drinkLog", drinkLog);
                 startActivity(homeIntent);
             }
         });
