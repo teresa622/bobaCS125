@@ -20,21 +20,18 @@ public class DrinkLogActivity extends AppCompatActivity {
         TextView displayDrinks = findViewById(R.id.drinks);
         String string = "";
         if (drinks == null) {
-            displayDrinks.setText("There are no past drinks :(");
-            return;
-        }
-        for (int x = 0; x < drinks.size(); x++) {
-            if (x == drinks.size() - 1) {
-                string = string + drinks.get(x);
-                continue;
+            string = "There are no past drinks :(";
+        } else {
+            for (int x = 0; x < drinks.size(); x++) {
+                string = string + drinks.get(x) +
+                        "-------------------------------------------------------------------------\n";
             }
-            string = string + drinks.get(x) +
-                    "-------------------------------------------------------------------------\n";
         }
         displayDrinks.setText(string);
         Button home = findViewById(R.id.home);
         final Intent homeIntent = new Intent(this, MainActivity.class);
-        homeIntent.putStringArrayListExtra("drinkLog", drinks);
+        int toppingsNum = getIntent().getIntExtra("toppings", 0);
+        homeIntent.putExtra("toppings", toppingsNum);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

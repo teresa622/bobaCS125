@@ -4,14 +4,20 @@
     android:layout_height="match_parent"
     android:background="#ffffff">
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="   " />
+
     <Button
         android:id="@+id/home"
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/custom_button"
         android:text="home" />
 
@@ -22,17 +28,18 @@
         android:layout_marginRight="10dp">
 
 
-        <TextView
+        <EditText
             android:id="@+id/drinks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:background="@android:color/transparent"
+            android:lineSpacingMultiplier="1.1"
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
-            android:lineSpacingMultiplier="1.1"
-            android:textSize="18sp" />
+            android:background="@android:color/transparent"
+            android:textSize="18sp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginHorizontal="15dp"/>
     </ScrollView>
 
 </LinearLayout>
