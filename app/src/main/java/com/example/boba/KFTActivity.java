@@ -12,15 +12,29 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
+
 public class KFTActivity extends AppCompatActivity {
     private static ArrayList drinkLog = new ArrayList<String>();
+    private String link = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,6 +162,15 @@ public class KFTActivity extends AppCompatActivity {
                 startActivity(homeIntent);
             }
         });
+        Picasso.get().setLoggingEnabled(true);
+        ImageView doggo = findViewById(R.id.doggo);
+        String url = "https://random.dog/woof.json";
+        showDoggo(url);
+        String type = link.substring(link.length() - 3);
+        while(!type.equals("jpg")) {
+            type = link.substring(link.length() - 3);
+        }
+        Picasso.get().load(link).into(doggo);
     }
 
     private static int getRandomNumberInRange(int min, int max) {
@@ -158,5 +181,30 @@ public class KFTActivity extends AppCompatActivity {
 
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
+    }
+    private void showDoggo(String url) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        String link = "";
+                        try {
+                            link = response.getString("url");
+                        } catch (Exception e) {
+                            Log.e("errors", "Error!");
+                        }
+                        Log.d("link", link);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Log.d("Yo", "6");
+                    }
+                });
+        queue.add(jsonObjectRequest);
     }
 }
