@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        int receivedNum = getIntent().getIntExtra("toppings", 0);
+        spinner.setSelection(receivedNum);
         final Intent kftIntent = new Intent(this, KFTActivity.class);
         final Intent drinkLogIntent = new Intent(this, DrinkLogActivity.class);
         kftButton.setOnClickListener(new View.OnClickListener() {
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(final View v) {
                 ArrayList drinks = getIntent().getStringArrayListExtra("drinkLog");
+                drinkLogIntent.putExtra("toppings", toppingsNum);
                 drinkLogIntent.putStringArrayListExtra("drinkLog", drinks);
                 startActivity(drinkLogIntent);
             }
