@@ -1,7 +1,6 @@
 package com.example.boba;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.res.TypedArrayUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,7 +25,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
@@ -35,12 +33,13 @@ import org.json.JSONObject;
 public class KFTActivity extends AppCompatActivity {
     private static ArrayList drinkLog = new ArrayList<String>();
     private String link = "";
+    private RequestQueue queue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kft);
         TextView drinkDisplay = findViewById(R.id.drinkDisplay);
-
+        queue = Volley.newRequestQueue(this);
         String[] yogurtDrinks = {"Yogurt Green Tea", "Yogurt Grapefruit Tea", "Yogurt Orange Tea"};
         String[] classicDrinks = {"Winter Melon Green Tea", "Honey Black Tea",
         "Honey Green Tea", "Honey Oolong Tea", "Longan Jujube Tea", "KungFu Black Tea",
@@ -163,14 +162,16 @@ public class KFTActivity extends AppCompatActivity {
             }
         });
         Picasso.get().setLoggingEnabled(true);
-        ImageView doggo = findViewById(R.id.doggo);
-        String url = "https://random.dog/woof.json";
-        showDoggo(url);
+        //ImageView doggo = findViewById(R.id.doggo);
+        showDoggo();
+        /*
         String type = link.substring(link.length() - 3);
-        while(!type.equals("jpg")) {
+        while(!type.equalsIgnoreCase("jpg")) {
+            showDoggo();
             type = link.substring(link.length() - 3);
         }
         Picasso.get().load(link).into(doggo);
+         */
     }
 
     private static int getRandomNumberInRange(int min, int max) {
@@ -182,29 +183,38 @@ public class KFTActivity extends AppCompatActivity {
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
     }
-    private void showDoggo(String url) {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+    private void showDoggo() {
+        Log.d("marker", "showDoggo");
+        String url = "https://random.dog/woof.json";
+        final ImageView doggo = findViewById(R.id.doggo);
+        JsonObjectRequest request = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        String link = "";
+                        String toReturn = "";
+                        Log.d("marker", "request reached");
                         try {
-                            link = response.getString("url");
+                            toReturn = response.getString("url");
                         } catch (Exception e) {
-                            Log.e("errors", "Error!");
+                            Log.e("error", "caught failure");
                         }
-                        Log.d("link", link);
+                        String type = toReturn.substring(toReturn.length() - 3);
+                        Log.d("type", type);
+                        while(!type.equalsIgnoreCase("jpg")) {
+                            showDoggo();
+                            return;
+                        }
+                        Picasso.get().load(toReturn).into(doggo);
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // TODO: Handle error
-                        Log.d("Yo", "6");
+                        Log.e("error", "request error");
                     }
                 });
-        queue.add(jsonObjectRequest);
+        queue.add(request);
+        Log.d("marker", "add request");
     }
 }

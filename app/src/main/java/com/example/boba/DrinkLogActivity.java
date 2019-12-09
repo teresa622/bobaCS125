@@ -28,8 +28,7 @@ public class DrinkLogActivity extends AppCompatActivity {
                 string = string + drinks.get(x);
                 continue;
             }
-            string = string + drinks.get(x) +
-                    "-----------------------------------------------------------------------------\n";
+            string = string + drinks.get(x);
         }
         displayDrinks.setText(string);
         Button home = findViewById(R.id.home);
