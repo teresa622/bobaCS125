@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.TypedArrayUtils;
 
 import java.text.SimpleDateFormat;
-import android.net.Uri;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,7 +31,6 @@ import com.android.volley.toolbox.Volley;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
-
 
 public class KFTActivity extends AppCompatActivity {
     private static ArrayList drinkLog = new ArrayList<String>();
@@ -106,30 +105,9 @@ public class KFTActivity extends AppCompatActivity {
             length = newDrinks.length;
             selectedDrink = newDrinks[getRandomNumberInRange(0, length - 1)];
         }
-
         String tops = "";
-        TextView toppingsDisplay = findViewById(R.id.toppingsDisplay);
-        if (toppingsNum == 0) {
-            toppingsDisplay.setVisibility(View.INVISIBLE);
-            TextView withText = findViewById(R.id.withText);
-            withText.setVisibility(View.INVISIBLE);
-        } else {
-            String toppingsOutput = "";
-            for (int i = 0; i < toppingsNum; i++) {
-                String input = toppings[getRandomNumberInRange(0, toppings.length - 1)];
-                toppingsOutput = toppingsOutput + input + ", " + " \n";
-                tops = tops + input + ", ";
-                if (i == toppingsNum - 1) {
-                    toppingsOutput = toppingsOutput.substring(0, toppingsOutput.length() - 4);
-                    tops = tops.substring(0, tops.length() - 3);
-                }
-            }
-            System.out.println(toppingsOutput);
-            toppingsDisplay.setText(toppingsOutput);
-        }
-
-        /**
-        Integer[] topsIndex = new Integer[toppingsNum];
+        ArrayList topsIndex = new ArrayList<Integer>();
+        //Integer[] topsIndex = new Integer[toppingsNum];
         if (toppingsNum == 10) {
             for (int x = 0; x < toppings.length; x++) {
                 if (x == toppings.length - 1) {
@@ -141,49 +119,51 @@ public class KFTActivity extends AppCompatActivity {
         } else {
             for (int x = 0; x < toppingsNum; x++) {
                 Integer generateRandom = getRandomNumberInRange(0, toppings.length - 1);
-                while(Arrays.asList(topsIndex).contains(generateRandom)) {
+                while(topsIndex.contains(generateRandom)) {
                     generateRandom = getRandomNumberInRange(0, toppings.length - 1);
                 }
-                topsIndex[x] = generateRandom;
+                topsIndex.add(generateRandom);
                 if (x == toppingsNum - 1) {
-                    tops += toppings[x];
+                    tops += toppings[generateRandom];
                 } else {
                     tops += toppings[generateRandom] + " and ";
                 }
             }
 
         }
-         **/
-
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = df.format(c.getTime());
         // formattedDate have current date/time
         Toast.makeText(this, formattedDate, Toast.LENGTH_SHORT).show();
-        drinkDisplay.setText(selectedDrink);
-        drinkLog.add(selectedDrink + ": " + formattedDate + "\n");
+        String displayText = "";
+        if (toppingsNum != 0) {
+            displayText = selectedDrink + " with " + tops;
+        } else {
+           displayText = selectedDrink;
+        }
+        drinkDisplay.setText(displayText);
+        drinkLog.add(displayText + ": " + formattedDate + "\n");
         Button geneButton = findViewById(R.id.geneButton);
         Button returnHome = findViewById(R.id.home);
 
-        final Intent kftIntent = new Intent(this, KFTActivity.class);
-        kftIntent.putExtra("toppings", toppingsNum);
         final Intent homeIntent = new Intent(this, MainActivity.class);
-        homeIntent.putExtra("toppings", toppingsNum);
+        homeIntent.putStringArrayListExtra("drinkLog", drinkLog);
         geneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                startActivity(kftIntent);
+                startActivity(homeIntent);
             }
         });
         returnHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                homeIntent.putStringArrayListExtra("drinkLog", drinkLog);
                 startActivity(homeIntent);
             }
         });
+        Picasso.get().setLoggingEnabled(true);
+        showDoggo();
     }
-
 
     private static int getRandomNumberInRange(int min, int max) {
 
@@ -194,7 +174,6 @@ public class KFTActivity extends AppCompatActivity {
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
     }
-
     private void showDoggo() {
         String url = "https://random.dog/woof.json";
         RequestQueue queue = Volley.newRequestQueue(this);
