@@ -107,15 +107,11 @@ public class KFTActivity extends AppCompatActivity {
         }
         String tops = "";
         ArrayList topsIndex = new ArrayList<Integer>();
-        //Integer[] topsIndex = new Integer[toppingsNum];
-        if (toppingsNum == 10) {
-            for (int x = 0; x < toppings.length; x++) {
-                if (x == toppings.length - 1) {
-                    tops += toppings[x];
-                } else {
-                    tops += toppings[x] + " and ";
-                }
-            }
+        TextView toppingsDisplay = findViewById(R.id.toppingsDisplay);
+        if (toppingsNum == 0) {
+            toppingsDisplay.setVisibility(View.INVISIBLE);
+            TextView withText = findViewById(R.id.withText);
+            withText.setVisibility(View.INVISIBLE);
         } else {
             for (int x = 0; x < toppingsNum; x++) {
                 Integer generateRandom = getRandomNumberInRange(0, toppings.length - 1);
@@ -126,7 +122,7 @@ public class KFTActivity extends AppCompatActivity {
                 if (x == toppingsNum - 1) {
                     tops += toppings[generateRandom];
                 } else {
-                    tops += toppings[generateRandom] + " and ";
+                    tops += toppings[generateRandom] + "\n";
                 }
             }
 
@@ -142,17 +138,22 @@ public class KFTActivity extends AppCompatActivity {
         } else {
            displayText = selectedDrink;
         }
-        drinkDisplay.setText(displayText);
+        drinkDisplay.setText(selectedDrink);
+        toppingsDisplay.setText(tops);
         drinkLog.add(displayText + ": " + formattedDate + "\n");
         Button geneButton = findViewById(R.id.geneButton);
         Button returnHome = findViewById(R.id.home);
 
         final Intent homeIntent = new Intent(this, MainActivity.class);
+        homeIntent.putExtra("toppings", toppingsNum);
         homeIntent.putStringArrayListExtra("drinkLog", drinkLog);
+        final Intent generateIntent = new Intent(this, KFTActivity.class);
+        generateIntent.putExtra("toppings", toppingsNum);
+        generateIntent.putStringArrayListExtra("drinkLog", drinkLog);
         geneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                startActivity(homeIntent);
+                startActivity(generateIntent);
             }
         });
         returnHome.setOnClickListener(new View.OnClickListener() {

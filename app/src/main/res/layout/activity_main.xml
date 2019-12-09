@@ -23,6 +23,8 @@
 
 
 
+
+
     ]]>
 
     <TextView
@@ -30,13 +32,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello! Ready to generate your drink?"
-        android:textSize="18sp"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:fontFamily="@font/dawning_of_a_new_day"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.108" />
+        app:layout_constraintVertical_bias="0.078" />
 
     <Button
         android:id="@+id/kftButton"
@@ -92,5 +95,20 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.85"
         app:srcCompat="@drawable/bobapixel" />
+
+    <TextView
+        android:id="@+id/toppingsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Number of toppings:"
+        android:textColor="#020101"
+        android:textSize="20dp"
+        app:fontFamily="@font/amatica_sc_bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.151"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.155" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
