@@ -22,17 +22,17 @@
         android:layout_marginRight="10dp">
 
 
-        <EditText
+        <TextView
             android:id="@+id/drinks"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lineSpacingMultiplier="1.1"
+            android:layout_margin="10dp"
+            android:background="@android:color/transparent"
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
-            android:background="@android:color/transparent"
-            android:textSize="18sp"
-            android:layout_margin="10dp"/>
+            android:lineSpacingMultiplier="1.1"
+            android:textSize="18sp" />
     </ScrollView>
 
 </LinearLayout>

@@ -201,7 +201,7 @@ public class KFTActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO: Handle error
-                        Log.d("Yo", "6");
+                        Log.d("errors", "Request Error!");
                     }
                 });
         queue.add(jsonObjectRequest);
