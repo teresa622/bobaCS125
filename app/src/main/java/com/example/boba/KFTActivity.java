@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.TypedArrayUtils;
 
 import java.text.SimpleDateFormat;
+import android.net.Uri;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -16,10 +17,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONObject;
+
 
 public class KFTActivity extends AppCompatActivity {
     private static ArrayList drinkLog = new ArrayList<String>();
@@ -172,6 +184,7 @@ public class KFTActivity extends AppCompatActivity {
         });
     }
 
+
     private static int getRandomNumberInRange(int min, int max) {
 
         if (min >= max) {
@@ -180,5 +193,38 @@ public class KFTActivity extends AppCompatActivity {
 
         Random r = new Random();
         return r.nextInt((max - min) + 1) + min;
+    }
+
+    private void showDoggo() {
+        String url = "https://random.dog/woof.json";
+        RequestQueue queue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        String link = "";
+                        try {
+                            link = response.getString("url");
+                        } catch (Exception e) {
+                            Log.e("errors", "Error!");
+                        }
+                        String type = link.substring(link.length() - 3);
+                        while(!type.equals("jpg")) {
+                            showDoggo();
+                            return;
+                        }
+                        ImageView doggo = findViewById(R.id.doggo);
+                        Picasso.get().load(link).into(doggo);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Log.d("errors", "Request Error!");
+                    }
+                });
+        queue.add(jsonObjectRequest);
     }
 }

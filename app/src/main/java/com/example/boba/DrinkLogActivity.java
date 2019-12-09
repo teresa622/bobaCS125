@@ -23,7 +23,8 @@ public class DrinkLogActivity extends AppCompatActivity {
             string = "There are no past drinks :(";
         } else {
             for (int x = 0; x < drinks.size(); x++) {
-                string = string + drinks.get(x);
+                string = string + drinks.get(x) +
+                        "-------------------------------------------------------------------------\n";
             }
         }
         displayDrinks.setText(string);
